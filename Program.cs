@@ -1,21 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ensure Npgsql can handle local timestamps if necessary, 
-// though using DateTime.UtcNow in your code is the preferred professional approach.
+// Fix for PostgreSQL timestamp issues
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-// Add services to the container.
+// Database Configuration
 builder.Services.AddDbContext<WebApplication1Context>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("WebApplication1Context") ??
-    throw new InvalidOperationException("Connection string 'WebApplication1Context' not found.")));
+    throw new InvalidOperationException("Connection string not found.")));
 
-// 1. Define the CORS policy to allow your Vercel Frontend to access this API
+// 1. CORS Setup
 builder.Services.AddCors(options => {
-    options.AddPolicy("AllowVercel", 
+    options.AddPolicy("AllowVercel",
         policy => {
             policy.WithOrigins("https://frontend-woad-eight-25.vercel.app")
                   .AllowAnyHeader()
@@ -29,20 +27,17 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// 2. Enable CORS - This must be placed after UseRouting (implicit here) and before UseAuthorization
+// 2. IMPORTANT: Use the exact policy name defined above
 app.UseCors("AllowVercel");
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
