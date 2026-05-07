@@ -14,12 +14,10 @@ builder.Services.AddDbContext<WebApplication1Context>(options =>
     throw new InvalidOperationException("Connection string 'WebApplication1Context' not found.")));
 
 // 1. Define the CORS policy to allow your Vercel Frontend to access this API
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowVercelApp",
-        policy =>
-        {
-            policy.WithOrigins("https://frontend-woad-eight-25.vercel.app/") // Replace with your actual Vercel URL
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowVercel", 
+        policy => {
+            policy.WithOrigins("https://frontend-woad-eight-25.vercel.app")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -39,7 +37,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // 2. Enable CORS - This must be placed after UseRouting (implicit here) and before UseAuthorization
-app.UseCors("AllowVercelApp");
+app.UseCors("AllowVercel");
 
 app.UseHttpsRedirection();
 
