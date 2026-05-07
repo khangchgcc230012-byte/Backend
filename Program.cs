@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowVercelApp",
         policy =>
         {
-            policy.WithOrigins("https://your-project-name.vercel.app") // Replace with your actual Vercel URL
+            policy.WithOrigins("https://frontend-woad-eight-25.vercel.app/") // Replace with your actual Vercel URL
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });

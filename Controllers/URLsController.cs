@@ -110,7 +110,7 @@ namespace WebApplication1.Controllers
         {
             if (string.IsNullOrEmpty(longUrl))
             {
-                return BadRequest("URL không được để trống.");
+                return BadRequest("URL cannot be blanked.");
             }
 
             // check URL 
@@ -158,7 +158,7 @@ namespace WebApplication1.Controllers
 
             if (urlEntry == null)
             {
-                return NotFound("Không tìm thấy mã rút gọn này.");
+                return NotFound("Can't find shortened link.");
             }
 
             // If it has, redirect
